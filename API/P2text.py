@@ -93,18 +93,7 @@ b1 = Button(win, text="识 别", command=sb)# 这是按键
 b2 = Button(win, text="保 存 为 ：text.txt", command=save)# 这是按键
 d1 = Label(win, text="图片转文字 by H.z  版本：1.1", fg="#ff5a5a", bg="#d1d1d1")
 
-# 插入单选框------开始
-
-# def updata():
-#     if hobby1.get() == 'yes':
-#         print("yes")
-#         return 'yes'
-#     else:
-#         print("no")
-#         return 'no'
-
-
-# 要绑定的变量 布尔类型
+# 要绑定的变量 Tkinter提供的IntVar()、StringVar()、BooleanVar()...
 # hobby1 = tkinter.BooleanVar()
 hobby1 = IntVar()
 check1 = tkinter.Checkbutton(win, text='智能换行', variable=hobby1, onvalue=1, offvalue=0)
