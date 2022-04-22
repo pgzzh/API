@@ -16,7 +16,7 @@ win.resizable(0, 0) # 禁止窗口最大化和改变尺寸
 win.iconbitmap(base64.b64decode(img))
 
 # 插入icon.py中的ICO-base64
-tmp = open("tmp.ico","wb+")
+tmp = open("tmp.ico", "wb+")
 tmp.write(base64.b64decode(img))
 tmp.close()
 win.iconbitmap('tmp.ico')#加图标
@@ -38,26 +38,35 @@ def sb():
     img = i.read()
     msg = client.basicGeneral(img)
     alltxt = '\n' + '------------' + date() + '------------' + '\n'
-    # msg是一个字典，其中words_result中包含了文字信息
+
+    # ------屏蔽了第一次的只有智能方法
+    # for i in msg.get('words_result'):
+    #     print(i.get('words'))
+    #     # 识别方法是一行一行的
+    #     txt1 = i.get('words')
+    #     if txt1[0].isdigit() == True:
+    #         alltxt += txt1 + '\n'
+    #         print('--------+1')
+    #     elif txt1[-1] == '。':
+    #         alltxt += txt1 + '\n'
+    #     else:
+    #         alltxt += txt1
+
+    # cs----20220422--增加了智能和普通换行
     for i in msg.get('words_result'):
         print(i.get('words'))
         # 识别方法是一行一行的
         txt1 = i.get('words')
-        if txt1[0].isdigit() == True:
-            alltxt += txt1 + '\n'
-            print('--------+1')
-        elif txt1[-1] == '。':
-            alltxt += txt1 + '\n'
-        # elif txt1[0] == '(' or txt1[0] == '（':
-        #     if txt1[1].isdigit() == True:
-        #         alltxt += '\n' + txt1
-        #         print('--------+2')
+        if hobby1.get() == 1:
+            if txt1[0].isdigit() == True:
+                alltxt += txt1 + '\n'
+            elif txt1[-1] == '。':
+                alltxt += txt1 + '\n'
+            else:
+                alltxt += txt1
         else:
-            alltxt += txt1
-        # alltxt += txt1 + '\n'
-    # log = c1.get("1.0", "end") #获取文本C1的内容
-    # c1.delete(1.0, END) #清空原文本框
-    # c1.insert(INSERT, alltxt + log)  #在文本后列加入原文本框内容
+            alltxt += txt1 + '\n'
+
     c1.insert(INSERT, alltxt)
 
 # "text.txt"选择位置保存
@@ -82,26 +91,23 @@ a2 = Entry(win, width=40)# 这是输入框
 a3 = Button(win, text="选 择", command=lj)# 这是按键
 b1 = Button(win, text="识 别", command=sb)# 这是按键
 b2 = Button(win, text="保 存 为 ：text.txt", command=save)# 这是按键
-d1 = Label(win, text="图片转文字 by H.z  版本：1.0", fg="#ff5a5a", bg="#d1d1d1")
+d1 = Label(win, text="图片转文字 by H.z  版本：1.1", fg="#ff5a5a", bg="#d1d1d1")
 
 # 插入单选框------开始
 
-def updata():
-    message = ''
-    if hobby1.get():
-        message += '智能换行\n'
-
-
-    # 清除text中的所有内容(从头到尾）
-    text.delete(0.0, tkinter.END)
-    # 插入到文本框中
-    text.insert(tkinter.INSERT, message)
+# def updata():
+#     if hobby1.get() == 'yes':
+#         print("yes")
+#         return 'yes'
+#     else:
+#         print("no")
+#         return 'no'
 
 
 # 要绑定的变量 布尔类型
-hobby1 = tkinter.BooleanVar()
-
-check1 = tkinter.Checkbutton(win, text='智能换行', variable=hobby1, command=updata)
+# hobby1 = tkinter.BooleanVar()
+hobby1 = IntVar()
+check1 = tkinter.Checkbutton(win, text='智能换行', variable=hobby1, onvalue=1, offvalue=0)
 # 插入单选框---结束
 
 c1 = Text(win)
@@ -116,11 +122,12 @@ c1.config(yscrollcommand=scroll.set) # 将滚动条关联到文本框
 
 # 整体界面插件间距和结构--调整代码
 a1.place(x=10, y=10, width=35, height=20) # 标签"路径"
-a2.place(x=46, y=10, width=450, height=20) # 单行输入框
-a3.place(x=500, y=7, width=55, height=25) # 按钮"选择"
-b1.place(x=560, y=7, width=105, height=25)# 按钮"识别"
+a2.place(x=46, y=10, width=370, height=20) # 单行输入框
+a3.place(x=420, y=7, width=55, height=25) # 按钮"选择"
+b1.place(x=565, y=7, width=100, height=25)# 按钮"识别"
 b2.place(x=670, y=7, width=155, height=25)# 按钮"保存"
-c1.place(x=10, y=40, width=830, height=450)# 最后的多行文本框
+c1.place(x=10, y=40, width=820, height=450)# 最后的多行文本框
 d1.place(x=0, y=500, width=850, height=20)# 最后一行签名
+check1.place(x=480, y=10, width=80, height=20)# 最后一行签名
 
 win.mainloop()
